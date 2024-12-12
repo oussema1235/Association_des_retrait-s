@@ -1,0 +1,52 @@
+<!-- Navigation with Improved Accessibility -->
+<nav class="navbar" role="navigation" aria-label="القائمة الرئيسية">
+    <div class="container navbar-content">
+        <a href="#" class="navbar-brand" aria-label="الصفحة الرئيسية">
+            <i class="fas fa-users" aria-hidden="true"></i> جمعية المتقاعدين بصفاقس
+        </a>
+        <div class="nav-links">
+            <a href="#home" aria-label="الصفحة الرئيسية">الرئيسية</a>
+            <a href="#services" aria-label="خدماتنا">الخدمات</a>
+            <a href="#activities" aria-label="أنشطتنا">الأنشطة</a>
+            <a href="#contact" aria-label="اتصل بنا">اتصل بنا</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Home Section with Proper Heading Structure -->
+<main class="container">
+    <section id="home" aria-labelledby="home-title">
+        <h1 id="home-title">مرحبًا بكم في جمعية المتقاعدين</h1>
+        <div class="services-grid">
+            <div class="service-card" role="article">
+                <i class="fas fa-heartbeat" aria-hidden="true"></i>
+                <h2>الرعاية الصحية</h2>
+                <p>برامج صحية متخصصة للمتقاعدين</p>
+            </div>
+            <!-- Other service cards follow similar pattern -->
+        </div>
+    </section>
+
+    <!-- Membership Form with Enhanced Accessibility -->
+    <div id="membershipModal" class="modal" role="dialog" aria-labelledby="membership-modal-title">
+        <div class="modal-content">
+            <h2 id="membership-modal-title">طلب العضوية</h2>
+            <form id="membershipForm" aria-describedby="form-description">
+                <p id="form-description" class="sr-only">يرجى ملء المعلومات التالية للتسجيل كعضو</p>
+                <div class="form-group">
+                    <label for="fullName">الاسم الكامل</label>
+                    <input type="text" id="fullName" class="form-control" required aria-required="true">
+                </div>
+                <div class="form-group">
+                    <label for="phone">رقم الهاتف</label>
+                    <input type="tel" id="phone" class="form-control" required aria-required="true" pattern="[0-9]{8,}">
+                </div>
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" class="form-control" required aria-required="true">
+                </div>
+                <button type="submit" class="btn" aria-label="إرسال طلب العضوية">إرسال الطلب</button>
+            </form>
+        </div>
+    </div>
+</main>

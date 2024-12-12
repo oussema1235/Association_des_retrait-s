@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Enhanced Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="جمعية المتقاعدين بصفاقس - منصة ذكية لدعم المتقاعدين وتقديم الخدمات الاجتماعية والصحية">
+    <meta name="theme-color" content="#1A5F7A">
+    
+    <!-- Security Headers (to be implemented on server) -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'self';
+        script-src 'self' https://cdnjs.cloudflare.com;
+        style-src 'self' https://fonts.googleapis.com https://cdnjs.cloudflare.com;
+        font-src https://fonts.gstatic.com;
+        connect-src 'self';
+    ">
+    
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+
+    <!-- Progressive Enhancement Styles -->
+    <style>
+        /* Existing styles */
+        @supports (display: grid) {
+            .services-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @supports not (display: grid) {
+            .services-grid {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+        }
+
+        /* Fallback for older browsers */
+        .no-js .services-grid {
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body class="no-js">
+    <!-- Remove no-js class when JavaScript is available -->
+    <script>
+        document.body.classList.remove('no-js');
+    </script>
+
+    <!-- Existing HTML content -->
+    <form id="membershipForm" novalidate>
+        <!-- Added novalidate for custom validation -->
+        <div class="form-group">
+            <label for="fullName">الاسم الكامل</label>
+            <input 
+                type="text" 
+                id="fullName" 
+                name="fullName"
+                class="form-control" 
+                required 
+                minlength="2" 
+                maxlength="50"
+                pattern="[ا-ي\s]+"
+                autocomplete="name"
+            >
+            <span class="error" aria-live="polite"></span>
+        </div>
+        
+        <div class="form-group">
+            <label for="phone">رقم الهاتف</label>
+            <input 
+                type="tel" 
+                id="phone" 
+                name="phone"
+                class="form-control" 
+                required 
+                pattern="[0-9]{8,}"
+                autocomplete="tel"
+            >
+            <span class="error" aria-live="polite"></span>
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,137 @@
+class FormStateManager {
+    constructor(formElement) {
+        this.form = formElement;
+        this.fields = {};
+        this.errors = {};
+        this.initializeFields();
+        this.bindEvents();
+    }
+
+    initializeFields() {
+        this.form.querySelectorAll('input, select, textarea').forEach(field => {
+            this.fields[field.id] = {
+                element: field,
+                value: field.value,
+                valid: false
+            };
+        });
+    }
+
+    bindEvents() {
+        Object.values(this.fields).forEach(field => {
+            field.element.addEventListener('input', this.validateField.bind(this, field.element));
+            field.element.addEventListener('blur', this.validateField.bind(this, field.element));
+        });
+
+        this.form.addEventListener('submit', this.handleSubmit.bind(this));
+    }
+
+    validateField(field) {
+        const validationRules = {
+            fullName: (value) => {
+                const arabicNameRegex = /^[\u0621-\u064A\s]{2,50}$/;
+                return arabicNameRegex.test(value);
+            },
+            phone: (value) => /^[0-9]{8,}$/.test(value),
+            email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+        };
+
+        const isValid = validationRules[field.id] 
+            ? validationRules[field.id](field.value) 
+            : field.checkValidity();
+
+        this.fields[field.id].valid = isValid;
+        this.displayFieldError(field, isValid);
+
+        return isValid;
+    }
+
+    displayFieldError(field, isValid) {
+        const errorElement = field.nextElementSibling;
+        if (!isValid) {
+            errorElement.textContent = this.getErrorMessage(field);
+            field.classList.add('invalid');
+            errorElement.style.display = 'block';
+        } else {
+            errorElement.textContent = '';
+            field.classList.remove('invalid');
+            errorElement.style.display = 'none';
+        }
+    }
+
+    getErrorMessage(field) {
+        const errorMessages = {
+            fullName: 'الاسم يجب أن يحتوي على حروف عربية فقط',
+            phone: 'رقم الهاتف يجب أن يحتوي على 8 أرقام على الأقل',
+            email: 'البريد الإلكتروني غير صحيح',
+            required: 'هذا الحقل مطلوب'
+        };
+
+        return errorMessages[field.id] || errorMessages.required;
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        
+        const isFormValid = Object.values(this.fields).every(field => this.validateField(field.element));
+
+        if (isFormValid) {
+            this.submitForm();
+        }
+    }
+
+    submitForm() {
+        const formData = new FormData(this.form);
+        const submissionData = {};
+
+        for (let [key, value] of formData.entries()) {
+            submissionData[key] = value;
+        }
+
+        // Simulate form submission
+        this.sendDataToServer(submissionData);
+    }
+
+    sendDataToServer(data) {
+        // In a real-world scenario, replace with actual API endpoint
+        console.log('Submitting data:', data);
+        
+        // Example fetch request
+        fetch('/api/membership', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            // Handle successful submission
+            this.showNotification('تم استلام طلبك بنجاح');
+            this.form.reset();
+        })
+        .catch(error => {
+            // Handle submission error
+            this.showNotification('حدث خطأ أثناء إرسال الطلب', 'error');
+        });
+    }
+
+    showNotification(message, type = 'success') {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.className = `notification ${type}`;
+        notification.style.display = 'block';
+
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 3000);
+    }
+}
+
+// Initialize form state management
+document.addEventListener('DOMContentLoaded', () => {
+    const membershipForm = document.getElementById('membershipForm');
+    if (membershipForm) {
+        new FormStateManager(membershipForm);
+    }
+});
